@@ -40,7 +40,7 @@ export default function DashboardPage() {
                 <div key={i} className="h-12 animate-pulse rounded bg-muted" />
               ))
             ) : (data?.branches?.length ?? 0) > 0 ? (
-              data.branches.map((branch: {
+              data!.branches.map((branch: {
                 branch: string;
                 revenue: number;
                 pairs: number;
@@ -92,8 +92,8 @@ export default function DashboardPage() {
               [...Array(5)].map((_, i) => (
                 <div key={i} className="h-14 animate-pulse rounded bg-muted" />
               ))
-            ) : data?.topStores?.length > 0 ? (
-              data.topStores.map((store: {
+            ) : (data?.topStores?.length ?? 0) > 0 ? (
+              data!.topStores.map((store: {
                 store: string;
                 branch: string;
                 revenue: number;
