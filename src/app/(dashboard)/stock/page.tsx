@@ -21,9 +21,9 @@ interface StockData {
     avgFS?: number;
     storeCount?: number;
     date?: string;
-    avgFF trend?: number;
-    avgFA trend?: number;
-    avgFS trend?: number;
+    avgFFtrend?: number;
+    avgFAtrend?: number;
+    avgFStrend?: number;
     store?: string;
     branch?: string;
     stockPairs?: number;
