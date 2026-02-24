@@ -1,7 +1,6 @@
 'use client';
 
 import { useFilters } from '@/hooks/useFilters';
-import { Branch } from '@/types/database';
 
 interface FilterBarProps {
   selectedBranch?: string;
