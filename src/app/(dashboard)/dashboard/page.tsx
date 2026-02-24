@@ -39,7 +39,7 @@ export default function DashboardPage() {
               [...Array(6)].map((_, i) => (
                 <div key={i} className="h-12 animate-pulse rounded bg-muted" />
               ))
-            ) : data?.branches?.length > 0 ? (
+            ) : (data?.branches?.length ?? 0) > 0 ? (
               data.branches.map((branch: {
                 branch: string;
                 revenue: number;
