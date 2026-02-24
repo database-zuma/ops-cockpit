@@ -1,32 +1,36 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
+
+// Mock next/navigation — redirect() throws NEXT_REDIRECT
+const mockRedirect = vi.fn((url: string) => {
+  throw new Error(`NEXT_REDIRECT:${url}`);
+});
+vi.mock('next/navigation', () => ({
+  redirect: (url: string) => mockRedirect(url),
+  usePathname: () => '/dashboard',
+  useRouter: () => ({ push: vi.fn(), replace: vi.fn(), back: vi.fn() }),
+}));
+
 import Home from '@/app/page';
+import DashboardPage from '@/app/(dashboard)/dashboard/page';
 
-describe('Home Component', () => {
-  it('renders the home page', () => {
-    render(<Home />);
-    
-    // Check that the main heading is rendered
-    const heading = screen.getByRole('heading', {
-      name: /to get started, edit the page.tsx file/i,
-    });
-    expect(heading).toBeInTheDocument();
+describe('Home Page', () => {
+  it('redirects to /dashboard', () => {
+    expect(() => render(<Home />)).toThrow('NEXT_REDIRECT:/dashboard');
+    expect(mockRedirect).toHaveBeenCalledWith('/dashboard');
+  });
+});
+
+describe('Dashboard Page', () => {
+  it('renders the dashboard placeholder', () => {
+    render(<DashboardPage />);
+    expect(screen.getByTestId('dashboard-page')).toBeInTheDocument();
+    expect(screen.getByText('Dashboard content coming soon.')).toBeInTheDocument();
   });
 
-  it('renders the Next.js logo', () => {
-    render(<Home />);
-    
-    const logo = screen.getByAltText('Next.js logo');
-    expect(logo).toBeInTheDocument();
-  });
-
-  it('renders navigation links', () => {
-    render(<Home />);
-    
-    const deployLink = screen.getByRole('link', { name: /deploy now/i });
-    const docsLink = screen.getByRole('link', { name: /documentation/i });
-    
-    expect(deployLink).toBeInTheDocument();
-    expect(docsLink).toBeInTheDocument();
+  it('renders with Panel component', () => {
+    render(<DashboardPage />);
+    expect(screen.getByTestId('panel')).toBeInTheDocument();
+    expect(screen.getByTestId('panel-title')).toHaveTextContent('Overview');
   });
 });
