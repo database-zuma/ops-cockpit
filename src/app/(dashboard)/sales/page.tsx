@@ -108,7 +108,7 @@ export default function SalesPage() {
                   {data.data.slice(-10).reverse().map((row) => (
                     <tr key={row.date} className="hover:bg-surface-100">
                       <td className="py-3 font-mono text-xs">{row.date}</td>
-                      <td className="py-3 text-right font-mono">{formatIDR(row.revenue)}</td>
+                      <td className="py-3 text-right font-mono">{formatIDR(row.revenue || 0)}</td>
                       <td className="py-3 text-right font-mono">{formatPairs(row.pairs || 0)}</td>
                       <td className="py-3 text-right font-mono text-muted-foreground">
                         Rp {(row.asp || 0).toLocaleString()}
@@ -139,7 +139,7 @@ export default function SalesPage() {
                   <tr key={row.store} className="hover:bg-surface-100">
                     <td className="py-3 font-medium">{row.store}</td>
                     <td className="py-3 text-muted-foreground">{row.branch}</td>
-                    <td className="py-3 text-right font-mono">{formatIDR(row.revenueMtd)}</td>
+                    <td className="py-3 text-right font-mono">{formatIDR(row.revenueMtd || 0)}</td>
                     <td className="py-3 text-right font-mono text-muted-foreground">
                       {row.targetMtd ? formatIDR(row.targetMtd) : '-'}
                     </td>
@@ -171,7 +171,7 @@ export default function SalesPage() {
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">Revenue</span>
-                  <span className="font-mono font-medium">{formatIDR(row.revenue, true)}</span>
+                  <span className="font-mono font-medium">{formatIDR(row.revenue || 0, true)}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">Pairs</span>
