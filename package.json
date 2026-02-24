@@ -9,9 +9,21 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@deck.gl/core": "^9.2.9",
+    "@deck.gl/layers": "^9.2.9",
+    "@deck.gl/react": "^9.2.9",
+    "@tremor/react": "^3.18.7",
+    "lucide-react": "^0.575.0",
+    "maplibre-gl": "^5.19.0",
     "next": "16.1.6",
+    "pg": "^8.18.0",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "react-globe.gl": "^2.37.0",
+    "react-map-gl": "^8.1.0",
+    "recharts": "^3.7.0",
+    "swr": "^2.4.0",
+    "three": "^0.183.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
