@@ -14,9 +14,9 @@ export function useDashboard(filters?: DashboardFilters) {
   const queryString = params.toString();
   const url = `/api/dashboard${queryString ? `?${queryString}` : ''}`;
 
-  const { data, error, isLoading } = useSWR(url, fetcher, {
+  const { data, error, isLoading, mutate } = useSWR(url, fetcher, {
     refreshInterval: 300000, // 5 minutes
   });
 
-  return { data, error, isLoading };
+  return { data, error, isLoading, mutate };
 }
