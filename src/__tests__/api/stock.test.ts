@@ -375,15 +375,16 @@ describe('GET /api/stock', () => {
       expect(body.error).toContain('Invalid view');
     });
 
-    it('should return 500 on database error', async () => {
+    it('should return mock data on database error', async () => {
       mockQuery.mockRejectedValueOnce(new Error('Connection refused'));
 
       const res = await GET(makeRequest('/api/stock'));
       const body = await res.json();
 
-      expect(res.status).toBe(500);
-      expect(body.success).toBe(false);
-      expect(body.error).toBe('Connection refused');
+      expect(res.status).toBe(200);
+      expect(body.success).toBe(true);
+      expect(body._mock).toBe(true);
+      expect(body.data).toBeDefined();
     });
 
     it('should include timestamp in all responses', async () => {
