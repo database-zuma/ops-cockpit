@@ -64,16 +64,17 @@ async function fetchSummary(branch?: string) {
 
   return {
     view: 'summary' as const,
-    data: {
+    data: [{
       totalStockPairs: toNum(row.total_stock_pairs) ?? 0,
       totalStockValue: toNum(row.total_stock_value) ?? 0,
       avgFF: toNum(row.avg_ff) ?? 0,
       avgFA: toNum(row.avg_fa) ?? 0,
       avgFS: toNum(row.avg_fs) ?? 0,
       storeCount: toNum(row.store_count) ?? 0,
-    },
+    }],
   };
 }
+
 
 async function fetchFfTrend(branch?: string) {
   const params: unknown[] = [];
@@ -224,6 +225,17 @@ export async function GET(request: NextRequest) {
 function getMockStockData(view: StockView) {
   switch (view) {
     case 'summary':
+      return {
+        view: 'summary' as const,
+        data: [{
+          totalStockPairs: 15420,
+          totalStockValue: 1250000000,
+          avgFF: 0.82,
+          avgFA: 0.88,
+          avgFS: 0.90,
+          storeCount: 52,
+        }],
+      };
       return {
         view: 'summary' as const,
         data: {

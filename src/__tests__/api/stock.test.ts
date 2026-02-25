@@ -40,7 +40,7 @@ describe('GET /api/stock', () => {
       expect(res.status).toBe(200);
       expect(body.success).toBe(true);
       expect(body.view).toBe('summary');
-      expect(body.data).toEqual({
+      expect(body.data[0]).toEqual({
         totalStockPairs: 125000,
         totalStockValue: 8500000000,
         avgFF: 0.72,
@@ -75,11 +75,11 @@ describe('GET /api/stock', () => {
       const res = await GET(makeRequest('/api/stock?view=summary'));
       const body = await res.json();
 
-      expect(body.data.totalStockPairs).toBe(0);
-      expect(body.data.totalStockValue).toBe(0);
-      expect(body.data.avgFF).toBe(0);
-      expect(body.data.avgFA).toBe(0);
-      expect(body.data.avgFS).toBe(0);
+      expect(body.data[0].totalStockPairs).toBe(0);
+      expect(body.data[0].totalStockValue).toBe(0);
+      expect(body.data[0].avgFF).toBe(0);
+      expect(body.data[0].avgFA).toBe(0);
+      expect(body.data[0].avgFS).toBe(0);
     });
 
     it('should handle empty result set', async () => {
@@ -89,8 +89,8 @@ describe('GET /api/stock', () => {
       const body = await res.json();
 
       expect(body.success).toBe(true);
-      expect(body.data.totalStockPairs).toBe(0);
-      expect(body.data.storeCount).toBe(0);
+      expect(body.data[0].totalStockPairs).toBe(0);
+      expect(body.data[0].storeCount).toBe(0);
     });
   });
 
@@ -239,7 +239,7 @@ describe('GET /api/stock', () => {
       const body = await res.json();
 
       expect(body.success).toBe(true);
-      expect(body.data.storeCount).toBe(8);
+      expect(body.data[0].storeCount).toBe(8);
 
       // Verify SQL received branch param
       expect(mockQuery).toHaveBeenCalledTimes(1);
