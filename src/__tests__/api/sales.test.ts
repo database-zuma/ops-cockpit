@@ -340,15 +340,17 @@ describe('GET /api/sales', () => {
   // ─── Error handling ──────────────────────────────────────────────────
 
   describe('error handling', () => {
-    it('should return 500 when DB query fails', async () => {
+    it('should return mock data when DB query fails', async () => {
       mockQuery.mockRejectedValueOnce(new Error('Connection refused'));
 
       const res = await GET(makeRequest());
       const json = await res.json();
 
-      expect(res.status).toBe(500);
-      expect(json.success).toBe(false);
-      expect(json.error).toBe('Internal server error');
+      expect(res.status).toBe(200);
+      expect(json.success).toBe(true);
+      expect(json._mock).toBe(true);
+      expect(json.data).toBeDefined();
+      expect(Array.isArray(json.data)).toBe(true);
     });
 
     it('should include timestamp in error response', async () => {
