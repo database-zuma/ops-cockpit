@@ -184,6 +184,13 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(data);
   } catch (error) {
     console.error('[API] /api/dashboard error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json(
+      { error: 'Failed to fetch dashboard metrics', details: errorMessage },
+      { status: 500 }
+    );
+  }
+    console.error('[API] /api/dashboard error:', error);
     return NextResponse.json(
       { error: 'Failed to fetch dashboard metrics' },
       { status: 500 }

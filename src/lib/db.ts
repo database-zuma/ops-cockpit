@@ -13,6 +13,26 @@ export function getPool(): Pool {
       database: process.env.PG_DATABASE || 'openclaw_ops',
       user: process.env.PG_USER || 'openclaw_app',
       password: process.env.PG_PASSWORD,
+      max: 5,
+      idleTimeoutMillis: 10000,
+      connectionTimeoutMillis: 10000,
+      ssl: process.env.PG_SSL === 'true' ? { rejectUnauthorized: false } : false,
+    });
+    
+    // Error handling for the pool
+    pool.on('error', (err) => {
+      console.error('Unexpected PostgreSQL pool error:', err);
+    });
+  }
+  return pool;
+}
+  if (!pool) {
+    pool = new Pool({
+      host: process.env.PG_HOST || '76.13.194.120',
+      port: parseInt(process.env.PG_PORT || '5432', 10),
+      database: process.env.PG_DATABASE || 'openclaw_ops',
+      user: process.env.PG_USER || 'openclaw_app',
+      password: process.env.PG_PASSWORD,
       max: 10,
       idleTimeoutMillis: 30000,
       connectionTimeoutMillis: 5000,
