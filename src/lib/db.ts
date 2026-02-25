@@ -91,7 +91,7 @@ export async function query<T = Record<string, unknown>>(
 }
 
 function getMockDataForQuery(sql: string): unknown[] {
-  // Simple pattern matching to return appropriate mock data
+  // Dashboard API mocks
   if (sql.includes('mv_ops_daily_summary') && sql.includes('GROUP BY report_date')) {
     return [{
       report_date: MOCK_DATA.dashboard.date,
@@ -103,7 +103,7 @@ function getMockDataForQuery(sql: string): unknown[] {
       avg_fs: String(MOCK_DATA.dashboard.avgFS),
     }];
   }
-  if (sql.includes('GROUP BY branch')) {
+  if (sql.includes('GROUP BY branch') && !sql.includes('SUM(revenue_today)')) {
     return MOCK_DATA.dashboard.branches.map(b => ({
       branch: b.branch,
       revenue: String(b.revenue),
@@ -120,6 +120,8 @@ function getMockDataForQuery(sql: string): unknown[] {
       achievement: String(s.achievement),
     }));
   }
+  
+  // Filter options mocks
   if (sql.includes('SELECT DISTINCT branch')) {
     return MOCK_DATA.filterOptions.branches.map(b => ({ branch: b }));
   }
@@ -135,6 +137,58 @@ function getMockDataForQuery(sql: string): unknown[] {
   if (sql.includes('SELECT MAX(report_date)')) {
     return [{ max: MOCK_DATA.filterOptions.latestDate }];
   }
+  
+  // Sales API mocks
+  if (sql.includes('CURRENT_DATE - $1::integer')) {
+    // Generate 30 days of daily sales data
+    const dailyData = [];
+    for (let i = 29; i >= 0; i--) {
+      const date = new Date('2026-02-22');
+      date.setDate(date.getDate() - i);
+      dailyData.push({
+        report_date: date.toISOString().split('T')[0],
+        revenue: String(Math.floor(Math.random() * 50000000) + 80000000),
+        pairs: String(Math.floor(Math.random() * 200) + 300),
+        asp: String(Math.floor(Math.random() * 200000) + 180000),
+      });
+    }
+    return dailyData;
+  }
+  if (sql.includes('revenue_mtd') && sql.includes('store_name')) {
+    // MTD by store
+    return MOCK_DATA.dashboard.topStores.map((s) => ({
+      store_name: s.store,
+      branch: s.branch,
+      area: s.branch === 'Bali' ? 'Denpasar' : s.branch === 'Jatim' ? 'Surabaya' : 'Jakarta Pusat',
+      revenue_mtd: String(s.revenue * 22),
+      target_mtd: String(s.revenue * 25),
+      achievement_pct: String(s.achievement),
+      pairs_today: String(Math.floor(Math.random() * 20) + 10),
+    }));
+  }
+  if (sql.includes('GROUP BY branch') && sql.includes('SUM(revenue_today)')) {
+    return MOCK_DATA.dashboard.branches.map(b => ({
+      branch: b.branch,
+      revenue: String(b.revenue),
+      pairs: String(b.pairs),
+      avg_achievement: String(b.achievement),
+    }));
+  }
+  
+  // Stock API mocks
+  if (sql.includes('stock_pairs') || sql.includes('stock_value')) {
+    return MOCK_DATA.dashboard.branches.map(b => ({
+      branch: b.branch,
+      store_count: String(Math.floor(Math.random() * 10) + 5),
+      total_stock_pairs: String(Math.floor(Math.random() * 1000) + 500),
+      total_stock_value: String(Math.floor(Math.random() * 500000000) + 200000000),
+      avg_ff: String(b.ff),
+      avg_fa: String(0.88),
+      avg_fs: String(0.90),
+      low_stock_stores: String(Math.floor(Math.random() * 3)),
+    }));
+  }
+  
   return [];
 }
 
